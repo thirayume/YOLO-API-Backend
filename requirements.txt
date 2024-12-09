@@ -1,3 +1,7 @@
 fastapi
+uvicorn
 python-multipart
 pillow
+torch
+ultralytics
+python-dotenv
