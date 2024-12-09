@@ -25,10 +25,10 @@ app.add_middleware(
 
 # Model URLs
 MODEL_URLS = {
-    'v5': "https://huggingface.co/thirayume/ai-snaily-yolo/resolve/main/v5.pt",
-    'v8': "https://huggingface.co/thirayume/ai-snaily-yolo/resolve/main/v8.pt",
-    'v10': "https://huggingface.co/thirayume/ai-snaily-yolo/resolve/main/v10.pt",
-    'v11': "https://huggingface.co/thirayume/ai-snaily-yolo/resolve/main/v11.pt"
+    'v5': "https://drive.google.com/uc?id=14RIqgapBW838rYClk99mKZh49dZN3AsI",
+    'v8': "https://drive.google.com/uc?id=14zV33EmnBNj9U137OUwWA1iLOzTQEI-C",
+    'v10': "https://drive.google.com/uc?id=15I-DjAgqBiYqTKockdgJpH9Z9JrJ6RTq",
+    'v11': "https://drive.google.com/uc?id=15V3b0kVWVvvvkV5Uhzjb5gDeCtiaOSRK"
 }
 
 # Initialize models dictionary
