@@ -1,15 +1,6 @@
 {
 	"version": 2,
 	"routes": [
-		{
-			"src": "/api/(.*)",
-			"dest": "/api/predict.py"
-		}
-	],
-	"functions": {
-		"api/predict.py": {
-			"memory": 1024,
-			"maxDuration": 10
-		}
-	}
-}
+	  { "src": "/api/(.*)", "dest": "/api/predict.py" }
+	]
+      }
