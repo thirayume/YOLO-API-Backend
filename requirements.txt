@@ -4,5 +4,5 @@ python-multipart
 pillow
 torch
 ultralytics
-torchvision
-opencv-python-headless
+gdown
+python-dotenv
