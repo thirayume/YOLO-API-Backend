@@ -1,10 +1,13 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from .utils import process_image, get_model_urls
+import torch
+from PIL import Image
+import io
+import os
+from ultralytics import YOLO
 
 app = FastAPI()
 
-# Enable CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,19 +16,47 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize models dictionary
+models = {}
+
+async def load_model(model_version: str):
+    if model_version not in models:
+        model_url = os.environ.get(f"MODEL_{model_version.upper()}_URL")
+        if not model_url:
+            raise HTTPException(status_code=404, detail=f"Model {model_version} not found")
+        try:
+            models[model_version] = YOLO(model_url)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error loading model: {str(e)}")
+    return models[model_version]
+
 @app.get("/api/health")
 async def health_check():
-    """Health check endpoint"""
-    model_urls = get_model_urls()
-    return {
-        "status": "ok",
-        "available_models": list(model_urls.keys())
-    }
+    return {"status": "ok"}
 
 @app.post("/api/predict/{model_version}")
 async def predict(model_version: str, file: UploadFile = File(...)):
-    """Prediction endpoint"""
     try:
-        return await process_image(file, model_version)
+        contents = await file.read()
+        image = Image.open(io.BytesIO(contents))
+        
+        model = await load_model(model_version)
+        results = model(image)
+        
+        boxes = results[0].boxes.data.cpu().numpy().tolist()
+        
+        formatted_boxes = []
+        for box in boxes:
+            formatted_boxes.append({
+                'box': box[:4],
+                'confidence': float(box[4]),
+                'class': int(box[5])
+            })
+        
+        return {
+            'boxes': formatted_boxes,
+            'model_version': model_version
+        }
+        
     except Exception as e:
-        return {"error": str(e)}, 500
+        raise HTTPException(status_code=500, detail=str(e))
