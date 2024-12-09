@@ -2,6 +2,7 @@ fastapi
 uvicorn
 python-multipart
 pillow
-ultralytics
 torch
-gunicorn
+ultralytics
+torchvision
+opencv-python-headless
