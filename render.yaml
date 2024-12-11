@@ -2,5 +2,5 @@ services:
   - type: web
     name: yolo-api
     env: docker
-    plan: free
-    autoDeploy: true
+    buildCommand: docker build -t yolo-api .
+    startCommand: docker run -p $PORT:10000 yolo-api
